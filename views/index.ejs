@@ -14,7 +14,7 @@
           <%  items.forEach(item => { %>
               <li class="collection-item"><div><a href="/items/<%= item._id%>"><%= item.name %> $<%= item.price%></a><a href="#!" 
                 class="secondary-content"><i class="material-icons">delete</i><i 
-                class="material-icons">edit</i></a></div>
+                class="material-icons modal-trigger" href="#edit_item_modal">edit</i></a></div>
               </li>
               <% }); %>
 
@@ -24,6 +24,43 @@
             <% } %>
       </ul>
   </div>
-  
+  <div id="edit_item_modal" class="modal">
+    <div class="modal-content">
+      <h4>Modal Header</h4>
+      <p>A bunch of text</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var elems = document.querySelectorAll('.modal');
+        var instances = M.Modal.init(elems);
+    });
+
+    itemContainer.onclick = function (e) {
+        console.log('e.target.textContent', e.target.textContent)
+        if (e.target.textContent === 'delete') {
+            // const id = deleteBtn.dataset.id
+            const id = e.target.getAttribute('data-id');
+            console.log(id)
+            const endpoint = `/items/${id}`;
+            fetch(endpoint, {
+                method: 'DELETE'
+            }).then(res => res.json()).
+                then(data => {
+                    console.log('data', data)
+                    window.location.href = data.redirect
+                }).
+                catch(err => console.log(err))
+        }
+    }
+</script>
+
+ 
+         
 </body>
 </html>
